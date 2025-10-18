@@ -1,0 +1,52 @@
+.container {
+  padding: 20px;
+}
+
+.inputRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.input {
+  padding: 10px;
+  width: 60%;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+}
+
+.button {
+  padding: 10px 16px;
+  border: none;
+  background-color: #3b82f6;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.6;
+}
+
+.results {
+  margin-top: 20px;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+}
+
+.card {
+  background: #f9fafb;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.image {
+  width: 200px;
+  border-radius: 8px;
+  margin-top: 5px;
+}

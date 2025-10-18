@@ -1,94 +1,91 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { auth, provider, signInWithPopup, signOut } from "./firebaseConfig";
+import { onAuthStateChanged } from "firebase/auth";
+import SearchMemories from "./components/SearchMemories";
+import UploadMemory from "./components/UploadMemory";
+import styles from "./App.module.css";
+import MemoryGallery from "./components/MemoryGallery";
 
 export default function App() {
-  const [query, setQuery] = useState("");
-  const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [page, setPage] = useState("search");
+  const [user, setUser] = useState(null);
 
-  const CLOUD_RUN_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      if (currentUser) console.log("✅ Logged in:", currentUser.displayName);
+      else console.log("👋 Logged out");
+    });
+    return () => unsubscribe();
+  }, []);
 
-  const handleSearch = async () => {
-    setLoading(true);
-    setError(null);
+  const handleLogin = async () => {
     try {
-      const res = await axios.post(`${CLOUD_RUN_URL}/query`, { q: query });
-      setResults(res.data.results || []);
-    } catch (err) {
-      console.error(err);
-      setError("Something went wrong. Try again!");
-    } finally {
-      setLoading(false);
+      await signInWithPopup(auth, provider);
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Logout failed:", error);
     }
   };
 
   return (
-    <div
-      style={{
-        fontFamily: "sans-serif",
-        padding: "2rem",
-        maxWidth: 600,
-        margin: "auto",
-      }}
-    >
-      <h1>🧠 Visual Recall Journal</h1>
-      <p>Search through your visual memories...</p>
+    <div className={styles.app}>
+      {/* Navigation */}
+      <nav className={styles.navbar}>
+        <div className={styles.navButtons}>
+          <button
+            onClick={() => setPage("search")}
+            className={page === "search" ? styles.active : ""}
+          >
+            🔍 Search
+          </button>
+          <button
+            onClick={() => setPage("upload")}
+            className={page === "upload" ? styles.active : ""}
+          >
+            📸 Upload
+          </button>
+        </div>
 
-      <input
-        value={query}
-        placeholder="e.g. golden retriever, café, sunset"
-        onChange={(e) => setQuery(e.target.value)}
-        style={{
-          width: "100%",
-          padding: "0.5rem",
-          borderRadius: 8,
-          border: "1px solid #ccc",
-          marginBottom: "1rem",
-        }}
-      />
+        <div className={styles.authSection}>
+          {user ? (
+            <>
+              <span className={styles.welcome}>👋 {user.displayName}</span>
+              <button className={styles.logout} onClick={handleLogout}>
+                Logout
+              </button>
+            </>
+          ) : (
+            <button className={styles.login} onClick={handleLogin}>
+              Sign in with Google
+            </button>
+          )}
+        </div>
 
-      <button
-        onClick={handleSearch}
-        disabled={!query || loading}
-        style={{
-          padding: "0.6rem 1rem",
-          borderRadius: 8,
-          border: "none",
-          backgroundColor: "#4f46e5",
-          color: "#fff",
-          cursor: "pointer",
-        }}
-      >
-        {loading ? "Searching..." : "Search"}
-      </button>
+        <button onClick={() => setPage("gallery")}>🖼 Gallery</button>
+      </nav>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      <div style={{ marginTop: "2rem" }}>
-        {results.length > 0 ? (
-          results.map((item, idx) => (
-            <div
-              key={idx}
-              style={{
-                background: "#f9fafb",
-                padding: "1rem",
-                borderRadius: 10,
-                marginBottom: "1rem",
-              }}
-            >
-              <img
-                src={item.image_url}
-                alt=""
-                style={{ width: "100%", borderRadius: 10 }}
-              />
-              <p>{item.caption}</p>
-            </div>
-          ))
+      {/* Main content */}
+      <main className={styles.main}>
+        {user ? (
+          page === "search" ? (
+            <SearchMemories user={user} />
+          ) : (
+            <UploadMemory user={user} />
+          ) 
         ) : (
-          !loading && <p>No results yet.</p>
+          <p className={styles.signInPrompt}>
+            Please sign in to access your memories.
+          </p>
         )}
-      </div>
+      </main>
     </div>
   );
 }

@@ -1,0 +1,81 @@
+.app {
+  font-family: "Inter", sans-serif;
+  background-color: #f9fafb;
+  min-height: 100vh;
+  color: #111827;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.navButtons button {
+  background: none;
+  border: none;
+  margin-right: 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #374151;
+  transition: color 0.2s;
+}
+
+.navButtons button:hover {
+  color: #111827;
+}
+
+.active {
+  font-weight: 600;
+  color: #1d4ed8;
+  border-bottom: 2px solid #1d4ed8;
+}
+
+.authSection {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.login,
+.logout {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.logout {
+  background-color: #ef4444;
+}
+
+.login:hover,
+.logout:hover {
+  opacity: 0.9;
+}
+
+.welcome {
+  margin-right: 10px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.main {
+  padding: 2rem;
+}
+
+.signInPrompt {
+  text-align: center;
+  color: #6b7280;
+  margin-top: 2rem;
+  font-size: 1.1rem;
+}
