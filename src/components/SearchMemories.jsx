@@ -1,24 +1,23 @@
 import React, { useState } from "react";
-import axios from "axios";
 import styles from "./SearchMemories.module.css";
+import api from "../apiClient";
 
 export default function SearchMemories({ user }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSearch = async () => {
-    if (!query.trim()) return;
+    if (!query.trim()) return alert("Please enter something to search.");
     setLoading(true);
+    setError("");
     try {
-      const res = await axios.post(
-        "http://127.0.0.1:8000/query",
-        { q: query, user: user.email }
-      );
+      const res = await api.post("/query", { q: query });
       setResults(res.data.results || []);
-    } catch (error) {
-      console.error("Search failed:", error);
-      setResults([]);
+    } catch (err) {
+      console.error("Search failed:", err);
+      setError("❌ Failed to fetch results. Check your backend or auth token.");
     } finally {
       setLoading(false);
     }
@@ -39,6 +38,8 @@ export default function SearchMemories({ user }) {
         </button>
       </div>
 
+      {error && <p className={styles.error}>{error}</p>}
+
       <div className={styles.results}>
         {results.length > 0 ? (
           <ul className={styles.list}>
@@ -46,7 +47,11 @@ export default function SearchMemories({ user }) {
               <li key={i} className={styles.card}>
                 <strong>{item.caption || "No caption"}</strong>
                 {item.url && (
-                  <img src={item.url} alt={item.caption} className={styles.image} />
+                  <img
+                    src={item.url}
+                    alt={item.caption}
+                    className={styles.image}
+                  />
                 )}
               </li>
             ))}

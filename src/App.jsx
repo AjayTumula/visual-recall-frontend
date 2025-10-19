@@ -4,42 +4,43 @@ import { onAuthStateChanged } from "firebase/auth";
 import SearchMemories from "./components/SearchMemories";
 import UploadMemory from "./components/UploadMemory";
 import styles from "./App.module.css";
-import MemoryGallery from "./components/MemoryGallery";
 
 export default function App() {
   const [page, setPage] = useState("search");
   const [user, setUser] = useState(null);
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("darkMode") === "true"
+  );
 
+  // sync theme
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      if (currentUser) console.log("✅ Logged in:", currentUser.displayName);
-      else console.log("👋 Logged out");
-    });
+    document.body.className = darkMode ? "dark" : "light";
+    localStorage.setItem("darkMode", darkMode);
+  }, [darkMode]);
+
+  // handle login state
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, setUser);
     return () => unsubscribe();
   }, []);
 
   const handleLogin = async () => {
     try {
       await signInWithPopup(auth, provider);
-    } catch (error) {
-      console.error("Login failed:", error);
+    } catch (err) {
+      console.error("Login error:", err);
     }
   };
 
   const handleLogout = async () => {
-    try {
-      await signOut(auth);
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
+    await signOut(auth);
   };
 
   return (
     <div className={styles.app}>
       {/* Navigation */}
       <nav className={styles.navbar}>
-        <div className={styles.navButtons}>
+        <div className={styles.navLeft}>
           <button
             onClick={() => setPage("search")}
             className={page === "search" ? styles.active : ""}
@@ -54,32 +55,37 @@ export default function App() {
           </button>
         </div>
 
-        <div className={styles.authSection}>
+        <div className={styles.navRight}>
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className={`${styles.button} ${styles.themeToggle}`}
+          >
+            {darkMode ? "☀️ Light" : "🌙 Dark"}
+          </button>
+
           {user ? (
             <>
-              <span className={styles.welcome}>👋 {user.displayName}</span>
-              <button className={styles.logout} onClick={handleLogout}>
+              <span className={styles.userName}>👋 {user.displayName}</span>
+              <button onClick={handleLogout} className={styles.button}>
                 Logout
               </button>
             </>
           ) : (
-            <button className={styles.login} onClick={handleLogin}>
+            <button onClick={handleLogin} className={styles.button}>
               Sign in with Google
             </button>
           )}
         </div>
-
-        <button onClick={() => setPage("gallery")}>🖼 Gallery</button>
       </nav>
 
       {/* Main content */}
-      <main className={styles.main}>
+      <main className={styles.content}>
         {user ? (
           page === "search" ? (
             <SearchMemories user={user} />
           ) : (
             <UploadMemory user={user} />
-          ) 
+          )
         ) : (
           <p className={styles.signInPrompt}>
             Please sign in to access your memories.

@@ -1,81 +1,115 @@
-.app {
-  font-family: "Inter", sans-serif;
-  background-color: #f9fafb;
-  min-height: 100vh;
-  color: #111827;
+:root {
+  --bg-light: #f9fafb;
+  --bg-dark: #121212;
+  --text-light: #1f2937;
+  --text-dark: #f3f4f6;
+  --accent: #2563eb;
+  --nav-light: #ffffff;
+  --nav-dark: #1f1f1f;
 }
 
+/* theme variables switch */
+.light {
+  --bg-color: var(--bg-light);
+  --text-color: var(--text-light);
+  --nav-bg: var(--nav-light);
+  --accent-color: var(--accent);
+}
+
+.dark {
+  --bg-color: var(--bg-dark);
+  --text-color: var(--text-dark);
+  --nav-bg: var(--nav-dark);
+  --accent-color: var(--accent);
+}
+
+/* main layout */
+.app {
+  font-family: "Segoe UI", sans-serif;
+  background: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* navigation bar */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background-color: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
+  background: var(--nav-bg);
+  padding: 0.8rem 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
   z-index: 10;
 }
 
-.navButtons button {
-  background: none;
+.navLeft button {
+  margin-right: 0.8rem;
+  background: transparent;
   border: none;
-  margin-right: 1rem;
   font-size: 1rem;
   cursor: pointer;
-  color: #374151;
-  transition: color 0.2s;
+  color: var(--text-color);
+  transition: 0.3s;
 }
 
-.navButtons button:hover {
-  color: #111827;
-}
-
+.navLeft button:hover,
 .active {
+  color: var(--accent-color);
   font-weight: 600;
-  color: #1d4ed8;
-  border-bottom: 2px solid #1d4ed8;
 }
 
-.authSection {
+/* right-side buttons */
+.navRight {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
 }
 
-.login,
-.logout {
-  background-color: #3b82f6;
-  color: white;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9rem;
-}
-
-.logout {
-  background-color: #ef4444;
-}
-
-.login:hover,
-.logout:hover {
-  opacity: 0.9;
-}
-
-.welcome {
-  margin-right: 10px;
+.userName {
   font-weight: 500;
-  color: #111827;
+  font-size: 0.95rem;
 }
 
-.main {
+.button {
+  background: #3b64d5;
+  color: #fff;
+  border: none;
+  padding: 0.45rem 0.9rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.1s;
+}
+
+.button:hover {
+  background: #1d4ed8;
+  transform: scale(1.03);
+}
+
+.themeToggle {
+  background: transparent;
+  border: 1px solid var(--accent-color);
+  color: var(--accent-color);
+}
+
+.themeToggle:hover {
+  background: var(--accent-color);
+  color: #fff;
+}
+
+/* main content */
+.content {
   padding: 2rem;
+  flex: 1;
 }
 
 .signInPrompt {
   text-align: center;
-  color: #6b7280;
-  margin-top: 2rem;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
+  margin-top: 4rem;
+  opacity: 0.9;
 }
