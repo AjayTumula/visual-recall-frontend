@@ -1,6 +1,8 @@
+// src/App.jsx
 import React, { useState, useEffect } from "react";
 import { auth, provider, signInWithPopup, signOut } from "./firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
+import { useMemories } from "./context/MemoriesContext"; // ✅ import context
 import SearchMemories from "./components/SearchMemories";
 import UploadMemory from "./components/UploadMemory";
 import styles from "./App.module.css";
@@ -12,6 +14,8 @@ export default function App() {
     localStorage.getItem("darkMode") === "true"
   );
 
+  const { fetchMemories } = useMemories(); // ✅ access context function
+
   // sync theme
   useEffect(() => {
     document.body.className = darkMode ? "dark" : "light";
@@ -20,7 +24,13 @@ export default function App() {
 
   // handle login state
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, setUser);
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      setUser(firebaseUser);
+      if (firebaseUser) {
+        // ✅ load that user's memories after login
+        await fetchMemories();
+      }
+    });
     return () => unsubscribe();
   }, []);
 
@@ -34,11 +44,12 @@ export default function App() {
 
   const handleLogout = async () => {
     await signOut(auth);
+    setUser(null);
   };
 
   return (
     <div className={styles.app}>
-      {/* Navigation */}
+      {/* Navbar */}
       <nav className={styles.navbar}>
         <div className={styles.navLeft}>
           <button
@@ -78,7 +89,7 @@ export default function App() {
         </div>
       </nav>
 
-      {/* Main content */}
+      {/* Main Content */}
       <main className={styles.content}>
         {user ? (
           page === "search" ? (
