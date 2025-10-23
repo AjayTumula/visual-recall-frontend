@@ -1,16 +1,48 @@
-# React + Vite
+# 🎨 Visual Recall Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend for the **AI-Powered Visual Recall Journal** — a personal AI memory app that lets users capture, search, and relive life moments through photos and notes.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
+- 🧠 AI-powered visual + text search
+- 📸 Upload and view daily memories
+- 🔐 Firebase Authentication (Google Login)
+- ⚡ Responsive UI built with React + Vite
+- 🔄 Connects seamlessly with FastAPI backend
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🏗️ Tech Stack
+- **Framework:** React (Vite)
+- **Auth:** Firebase Authentication
+- **UI:** Tailwind CSS
+- **API:** Axios for backend integration
+- **State Management:** React Hooks
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## ⚙️ Setup Instructions
+
+### 1️⃣ Clone the Repository
+git clone https://github.com/your-username/visual-recall-frontend.git
+cd visual-recall-frontend
+
+2️⃣ Install Dependencies
+npm install
+
+3️⃣ Add Environment Variables
+Create a .env file in the root directory and add your Firebase config:
+VITE_FIREBASE_API_KEY=your_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project
+VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+VITE_FIREBASE_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+VITE_BACKEND_URL=http://127.0.0.1:8000
+
+▶️ Run the App
+npm run dev
+
+
+
